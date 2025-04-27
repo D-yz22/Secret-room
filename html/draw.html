@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing</title>
+    <link rel="stylesheet" href="sample3.css">
+
+<head>
+    <meta charset="utf-8">
+    <title>canvas_base.html</title>
+</head>
+
+<body>
+    <section>
+        <h1>Let's draw!</h1>
+        <nav>
+            <!-- 線の色を変更するカラーピッカーHTML要素[id="color"] -->
+            <!-- 線の太さを変更するスライダーHTML要素[id="range"] -->
+            <button id="clear_btn">all clear</button>
+        </nav>
+        <button id="pen_btn">pen</button>
+        <input type="range" id="size" min="1" max="100" value="50">
+        <input type="color" id="col">
+        <button id="erase_btn">eraser</button>
+        <input type="range" id="erase" min="1" max="100" value="50"><br>
+        <canvas id="drowarea" width="500" height="500" style="border:1px solid blue;"></canvas>
+    </section>
+
+
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script>
+
+          
+        //初期化(変数letで宣言)
+        let canvas_mouse_event = false; //スイッチ [ true=線を引く, false=線は引かない ]  ＊＊＊
+        let oldX = 0; //１つ前の座標を代入するための変数
+        let oldY = 0; //１つ前の座標を代入するための変数
+        let bold_line = 3; //ラインの太さをここで指定[スライダー値]
+        let color = "#000"; //ラインの色をここで指定[カラーピッカー]
+
+        //------------------------------------------------
+        const can = $("#drowarea")[0]; //CanvasElement
+        const ctx = can.getContext("2d"); //描画するための準備！
+        //------------------------------------------------
+        //上2つのスクリプトを記述します。
+        $("#col").on("change", function(){
+            const v = $(this).val();
+            color = v;
+        });  
+
+        $("#size").on("change",function(){
+            const v = $(this).val();
+            bold_line = v;
+        });
+
+        $("#erase").on("change",function(){
+            const v = $(this).val();
+            bold_line = v;
+            color = "#ffffff";
+        });
+
+
+
+        //mousedown：フラグをTrue
+        //-----------------------------------------------
+        //oldX = e.offsetX;       //MOUSEDOWNしたX横座標取得
+        //oldY = e.offsetY; //MOUSEDOWN Y高さ座標取得
+        //canvas_mouse_event=true;
+        //-----------------------------------------------
+        //上5つのスクリプトを記述します。
+        $(can).on("mousedown", function(e){
+            //console.log(e);
+            oldX = e.offsetX;       //MOUSEDOWNしたX横座標取得
+            oldY = e.offsetY; //MOUSEDOWN Y高さ座標取得
+            canvas_mouse_event=true;
+        })
+
+
+        //mousemove：フラグがTrueだったら描く ※e：イベント引数取得
+        //----------------------------------------------
+        $(can).on("mousemove",function(e){
+            //console.log(e);
+            if(canvas_mouse_event==true){
+                const px = e.offsetX;
+                const py = e.offsetY;
+
+                if (px < 5 || px > 495 || py < 5 || py > 495) {
+                    canvas_mouse_event = false;
+                }
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = bold_line;
+                ctx.beginPath();
+                ctx.lineJoin= "round";
+                ctx.lineCap = "round";
+                ctx.moveTo(oldX, oldY);
+                ctx.lineTo(px, py);
+                ctx.stroke();
+                oldX = px;
+                oldY = py;
+            }
+        });
+
+        
+
+
+        //mouseup：フラグをfalse
+        //------------------------------------------------
+        //    canvas_mouse_event=false;
+        //------------------------------------------------
+        $(can).on("mouseup", function(){
+            canvas_mouse_event =false;
+        });
+
+       
+
+        //#clear_btn：クリアーボタンAction
+        //-----------------------------------------------------------------
+        //    ctx.beginPath();
+        //    ctx.clearRect(0, 0, can.width, can.height);
+        //-----------------------------------------------------------------
+        $("#clear_btn").on("click",function(){
+            const result = window.confirm("キャンバス内の作品を全削除しますか？");
+            if(result){
+                ctx.beginPath();
+                ctx.clearRect(0, 0, can.width, can.height);
+            }
+        });
+
+        $("#pen_btn").on("click",function(){
+            const v = $("#col").val();
+            color = v;
+        });
+
+        $("#erase_btn").on("click",function(){
+            color = "#ffffff";
+        });
+
+        $("#download").click(function(){
+            canvas = document.getElementById('canvas');
+            const base64 = canvas.toDataURL("image/jpeg");
+            document.getElementById("download").href = base64;
+    });
+    
+    // img.onload = function () {
+    //     ctx.drawImage(img, 0, 0);
+    //     window.localStorage["キー"] = canvas.toDataURL();
+    //     document.getElementById().src = window.localStorage["キー"];
+    //   };
+    //   img.src = "画像パス";
+    
+    </script>
+    <!-- <a id="download" href="#" download="canvas.png">Download</a> -->
+    
+    <!-- <div id="download">
+    <input type="button" href="#" download="canvas.jpg" value="download">
+    </div> -->
+    <br>
+    <input type="button" onclick="location.href='./home.html'" value="Home">
+</body>
+
+</html>
