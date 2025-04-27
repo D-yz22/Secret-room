@@ -1,0 +1,23 @@
+body{
+    background-color: #000000;
+    margin:0;
+    padding:0;
+    text-align: center;
+    font-size: 32px;
+    width:100%;
+    font-family: cursive;
+}
+header{
+    background-color: #000000;
+    border-top: chartreuse;
+}
+h1{
+    color: white;
+    font-size: 100%;
+    text-align: center;
+}
+
+.btn{
+    height: 20px;
+    text-align: center;
+}
