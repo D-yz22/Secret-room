@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Secret</title>
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/start.css">
+</head>
+<body style="background-color: black;">
+    <header style="background-color: black;">
+        <h1 style="color: #f1eae0; font-size: 50px;">Secret</h1>
+    </header>
+    <img src="key.png" alt="鍵" height="80px">
+    <div id="btn">
+        <input type="button" value="Password" onclick="gate();">
+        <script>
+        function gate() {
+            const pas = 3582; 
+            let UserInput = prompt("パスワードを入力して下さい:","");
+            if (UserInput == pas) {
+                location.href = "html/home.html";
+            } else {
+                alert("パスワードが違います");
+            }
+        }
+        
+        </script>
+    </div>        
+
+</body>
+</html>
